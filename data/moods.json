@@ -1,0 +1,10 @@
+[
+  { "id": "yagmurlu-aksam", "baslik": "Yağmurlu bir akşam", "ipucu": "Battaniye, çay ve çözülmeyi bekleyen bir sır.", "konu": "mystery" },
+  { "id": "uzun-yolculuk", "baslik": "Uzun bir yolculuk", "ipucu": "Pencereden akan manzaraya eşlik edecek bir macera.", "konu": "adventure" },
+  { "id": "kalp-kirikligi", "baslik": "Kalbim biraz kırık", "ipucu": "Seni anlayan bir hikâye.", "konu": "love" },
+  { "id": "dusunmek", "baslik": "Düşünmek istiyorum", "ipucu": "Kapattıktan sonra da aklından çıkmayacak sorular.", "konu": "philosophy" },
+  { "id": "gulmek", "baslik": "Biraz gülmeliyim", "ipucu": "Yüksek sesle güldüren sayfalar.", "konu": "humor" },
+  { "id": "uykusuz-gece", "baslik": "Uykusuz bir gece", "ipucu": "Işığı kapatmaya cesaret edemeyeceğin bir kitap.", "konu": "horror" },
+  { "id": "baska-dunya", "baslik": "Başka bir dünyaya kaçmak", "ipucu": "Haritası olan, büyüsü olan bir evren.", "konu": "fantasy" },
+  { "id": "nostalji", "baslik": "Eski zamanlar", "ipucu": "Yıllardır elden ele geçen bir klasik.", "konu": "classic_literature" }
+]

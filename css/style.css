@@ -1,0 +1,25 @@
+/* =========================================================
+   Kapaksız - tek stil dosyası (ödev şartı: tek harici CSS)
+   Bölümler:
+   1. Değişkenler (:root)
+   2. Temel ayarlar
+   3. Üst bilgi ve menü
+   4. Sayfa bölümleri
+   5. Kartlar
+   6. Form
+   7. Alt bilgi
+   8. Medya sorguları (tablet, masaüstü)
+   ========================================================= */
+
+/* 1. Değişkenler: renkleri ve ölçüleri tek yerde tutarız.
+   Karanlık modda sadece bu değerleri değiştirmemiz yeterli olacak. */
+:root {
+  --renk-zemin: #f6f1e7;      /* eski kâğıt rengi */
+  --renk-metin: #2b2622;
+  --renk-vurgu: #b5523b;      /* mühür kırmızısı */
+  --renk-paket: #c9a77c;      /* ambalaj kâğıdı */
+  --yazi-govde: "Georgia", serif;
+  --bosluk: 1rem;
+  --kose: 8px;
+  --gecis: 0.3s ease;
+}
