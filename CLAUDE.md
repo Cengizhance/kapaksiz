@@ -1,4 +1,4 @@
-# Kapaksız: proje notları
+projen# Kapaksız: proje notları
 
 Bu dosya, projeye VS Code'daki Claude ile devam edebilmek için şimdiye kadar yapılanları özetler.
 
@@ -50,17 +50,20 @@ Bu dosya, projeye VS Code'daki Claude ile devam edebilmek için şimdiye kadar y
   - `AI-KULLANIMI.md`
 - VS Code'a Live Server eklentisi kuruldu. `fetch` ile JSON okunabilmesi için site Live Server ile açılmalı.
 
+## Yapılanlar (20.11.2026, ikinci oturum)
+- İlk commit atıldı ve `kurulum` dalı GitHub'a gönderildi (`17fbcdb`).
+- Çalışma şekli değişti: Öğrencinin isteğiyle kodu artık Claude yazıyor, öğrenci inceliyor. Her adım `AI-KULLANIMI.md` dosyasına dürüstçe not ediliyor. Öğrenci izlerin gizlenmesini istedi; beyanın silinmeyeceği ya da eksik gösterilmeyeceği konuşuldu. Bunun yerine `CLAUDE.md`'nin `.gitignore`'a alınabileceği söylendi.
+- **Aşama 2–4 ve Aşama 5'in çoğu yazıldı:** 4 HTML sayfası, `css/style.css` (tamamı), `js/main.js` (menü, karanlık mod, `fetch` yardımcıları, kitap kartı, pasaport `localStorage` fonksiyonları), `js/anasayfa.js` (ruh hali kartları, günün randevusu), `js/randevu.js` (yükleme, hata, arama, filtre).
+- Open Library'den başka dilde gelen ilk cümleler için filtre yazıldı: Sadece Latin harfleri ve en az 2 yaygın İngilizce kelime. `limit=100` ile her konuda 13–68 kitap geçiyor.
+- **Tarayıcıda henüz test edilmedi.**
+
 ## Sıradaki adımlar
-1. **İlk commit henüz atılmadı.** Terminalde `kapaksiz` klasöründe sırayla:
-   - `git add .`
-   - `git commit -m "Proje klasör yapısı ve başlangıç dosyaları eklendi"`
-   - `git push -u origin kurulum`
-2. **Aşama 2, HTML iskeleti:** `index.html`'i Claude açıklamalarıyla yazacak, `iletisim.html`'i öğrenci aynı kalıpla yazacak. Sonra `randevu.html` ve `pasaport.html` gelecek.
-3. **Aşama 3, CSS:** Flexbox menü, Grid kartlar, medya sorguları, hamburger menü, kart çevirme ve mühür animasyonları.
-4. **Aşama 4, JavaScript DOM:** Menü, karanlık mod, ruh hali kartlarının `moods.json`'dan üretilmesi, arama ve filtre.
-5. **Aşama 5, veri:** Open Library'den `fetch`, yükleniyor ve hata durumları, pasaport için `localStorage`.
-6. **Aşama 6, form:** Doğrulama ve geri bildirim.
-7. **Aşama 7, yayın:** `kurulum` dalını `main`'e birleştir, GitHub Pages'i aç, README'yi yaz, zip'i hazırla.
+1. **Bekleyen commit'ler:** HTML, CSS ve JS dosyaları commit'lenmedi. Önerilen 3 commit: HTML iskeleti / stil dosyası / JS ve AI-KULLANIMI.
+2. **Live Server ile test:** Konsol hatalarını düzelt.
+3. **`js/pasaport.js`:** Mühür listesi (`pasaportuOku`), yıllık hedef formu (`kapaksiz-hedef` anahtarı), `<progress>`, sıfırlama düğmesi. `pasaport.html`'e `<script>` ekle.
+4. **`js/iletisim.js`:** `preventDefault` ile doğrulama, `.hata-mesaji` span'lerine `textContent`, `.hatali` sınıfı, `#basari-mesaji`. `iletisim.html`'e `<script>` ekle.
+5. **Ödev şartı kontrolü:** HTML'de en az bir statik `<img alt>` yok; kapak resimleri JS ile geliyor. Gerekirse `img/` içine bir logo ya da görsel ekle.
+6. **Aşama 7, yayın:** `kurulum` dalını `main`'e birleştir, GitHub Pages'i aç, README'yi yaz (satır numaralı gereksinim tablosu, ekran görüntüleri, yapay zekâ beyanı), zip'i hazırla.
 
 ## Diğer bağlam
 - Aynı tarihte CEN207 Java finali de teslim edilecek. O ayrı bir proje: `Belgeler\cen207-2026-2027-090-cengizhan-ogur-java`, ekip arkadaşı Furkan Enez. İş bölümü: A seçeneği (veri saklama ve dosyalar) Cengizhan'da, B seçeneği (algoritmalar) Furkan'da.

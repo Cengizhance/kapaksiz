@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kapaksız: Okuma pasaportun. Okuduğun kitaplar ve yıllık hedefin.">
+  <title>Okuma pasaportum | Kapaksız</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <!-- ================= ORTAK ÜST BİLGİ ================= -->
+  <header class="ust-bilgi">
+    <a href="index.html" class="logo">Kapaksız</a>
+
+    <button class="menu-dugmesi" type="button" aria-expanded="false" aria-controls="ana-menu" aria-label="Menüyü aç">
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+    </button>
+
+    <nav id="ana-menu" class="ana-menu" aria-label="Ana menü">
+      <ul>
+        <li><a href="index.html">Ana sayfa</a></li>
+        <li><a href="randevu.html">Kör randevu</a></li>
+        <li><a href="pasaport.html" aria-current="page">Okuma pasaportum</a></li>
+        <li><a href="iletisim.html">Kitap öner</a></li>
+      </ul>
+    </nav>
+
+    <button class="tema-dugmesi" type="button" aria-label="Karanlık modu aç/kapat">◐</button>
+  </header>
+
+  <main>
+    <section class="pasaport-giris" aria-labelledby="pasaport-baslik">
+      <h1 id="pasaport-baslik">Okuma pasaportum</h1>
+      <p>Açtığın ve okuduğun her paket buraya mühürlenir. Bilgiler sadece bu tarayıcıda saklanır.</p>
+    </section>
+
+    <!-- Yıllık hedef. Hedef ve okunan kitaplar localStorage'da tutulacak (Aşama 5). -->
+    <section class="hedef" aria-labelledby="hedef-baslik">
+      <h2 id="hedef-baslik">Yıllık hedefim</h2>
+
+      <form id="hedef-formu" class="form form-satir" novalidate>
+        <div class="form-alani">
+          <label for="hedef-sayisi">Bu yıl kaç kitap okumak istiyorsun?</label>
+          <input type="number" id="hedef-sayisi" name="hedef" required min="1" max="365"
+                 inputmode="numeric" aria-describedby="hedef-hata">
+          <span class="hata-mesaji" id="hedef-hata"></span>
+        </div>
+        <button type="submit" class="dugme">Hedefi kaydet</button>
+      </form>
+
+      <!-- <progress>: İlerleme çubuğu için hazır HTML öğesi. value ve max değerlerini JS güncelleyecek. -->
+      <div class="ilerleme">
+        <label for="hedef-ilerleme">İlerleme</label>
+        <progress id="hedef-ilerleme" value="0" max="12">0 / 12</progress>
+        <p id="ilerleme-metni" aria-live="polite">Henüz hedef belirlemedin.</p>
+      </div>
+    </section>
+
+    <!-- Mühürlenmiş kitaplar. Liste JS ile createElement kullanılarak doldurulacak.
+         Her mühür eklenince CSS'teki mühür animasyonu çalışacak (Aşama 3). -->
+    <section class="muhurler" aria-labelledby="muhur-baslik">
+      <h2 id="muhur-baslik">Mühürlerim</h2>
+      <ul id="okunan-kitaplar" class="kart-izgara muhur-listesi"></ul>
+      <p id="bos-pasaport" class="durum">Pasaportun henüz boş. <a href="randevu.html">İlk paketini aç.</a></p>
+      <button type="button" id="pasaportu-temizle" class="dugme dugme-ikincil">Pasaportu sıfırla</button>
+    </section>
+  </main>
+
+  <!-- ================= ORTAK ALT BİLGİ ================= -->
+  <footer class="alt-bilgi">
+    <p>Kapaksız · CEN303 Web Mobil Programlama final projesi</p>
+    <p>Kitap verileri: <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a></p>
+  </footer>
+
+</body>
+</html>

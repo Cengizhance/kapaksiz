@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kapaksız: Bir yabancıya hangi kitabı paketlerdin? Önerini bize yaz.">
+  <title>Kitap öner | Kapaksız</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <!-- ================= ORTAK ÜST BİLGİ ================= -->
+  <header class="ust-bilgi">
+    <a href="index.html" class="logo">Kapaksız</a>
+
+    <button class="menu-dugmesi" type="button" aria-expanded="false" aria-controls="ana-menu" aria-label="Menüyü aç">
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+    </button>
+
+    <nav id="ana-menu" class="ana-menu" aria-label="Ana menü">
+      <ul>
+        <li><a href="index.html">Ana sayfa</a></li>
+        <li><a href="randevu.html">Kör randevu</a></li>
+        <li><a href="pasaport.html">Okuma pasaportum</a></li>
+        <!-- Aktif sayfa bu olduğu için aria-current burada -->
+        <li><a href="iletisim.html" aria-current="page">Kitap öner</a></li>
+      </ul>
+    </nav>
+
+    <button class="tema-dugmesi" type="button" aria-label="Karanlık modu aç/kapat">◐</button>
+  </header>
+
+  <main>
+    <section class="oneri" aria-labelledby="oneri-baslik">
+      <h1 id="oneri-baslik">Bir yabancıya hangi kitabı paketlerdin?</h1>
+      <p>Kapağını göstermeden birine kitap önerecek olsan hangisini seçerdin? Bize yaz.</p>
+
+      <!-- novalidate: Tarayıcının kendi hata balonlarını kapatır. Doğrulamayı Aşama 6'da
+           kendi JS kodumuzla (preventDefault) yapıp mesajları alanların yanına yazacağız.
+           required, minlength gibi nitelikler yine de yerinde kalır, JS de bunları kontrol edecek. -->
+      <form id="oneri-formu" class="form" novalidate>
+
+        <!-- Her alan bir kutuda: label + input + hata mesajı -->
+        <div class="form-alani">
+          <!-- for="ad" ile id="ad" eşleşir. Label'a tıklayınca imleç alana gider. -->
+          <label for="ad">Adın</label>
+          <input type="text" id="ad" name="ad" required minlength="2" autocomplete="name"
+                 aria-describedby="ad-hata">
+          <!-- aria-describedby: Hata mesajı alanla ilişkilendirilir, ekran okuyucu ikisini birlikte okur. -->
+          <span class="hata-mesaji" id="ad-hata"></span>
+        </div>
+
+        <div class="form-alani">
+          <label for="eposta">E-posta</label>
+          <!-- type="email": Mobilde @ işaretli klavye açılır, tarayıcı biçimi de denetler. -->
+          <input type="email" id="eposta" name="eposta" required autocomplete="email"
+                 aria-describedby="eposta-hata">
+          <span class="hata-mesaji" id="eposta-hata"></span>
+        </div>
+
+        <div class="form-alani">
+          <label for="kitap">Kitap adı</label>
+          <input type="text" id="kitap" name="kitap" required aria-describedby="kitap-hata">
+          <span class="hata-mesaji" id="kitap-hata"></span>
+        </div>
+
+        <div class="form-alani">
+          <label for="neden">Neden bu kitap?</label>
+          <textarea id="neden" name="neden" rows="5" required minlength="20"
+                    aria-describedby="neden-hata"></textarea>
+          <span class="hata-mesaji" id="neden-hata"></span>
+        </div>
+
+        <button type="submit" class="dugme">Paketle ve gönder</button>
+
+        <!-- Başarı mesajı. aria-live="polite": İçerik değişince ekran okuyucu bunu duyurur. -->
+        <p id="basari-mesaji" class="basari-mesaji" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <!-- ================= ORTAK ALT BİLGİ ================= -->
+  <footer class="alt-bilgi">
+    <p>Kapaksız · CEN303 Web Mobil Programlama final projesi</p>
+    <p>Kitap verileri: <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a></p>
+  </footer>
+
+</body>
+</html>

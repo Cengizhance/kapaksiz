@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kapaksız: Paketli kitaplar arasından ilk cümlesine göre seç, paketi aç.">
+  <title>Kör randevu | Kapaksız</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/main.js" defer></script>
+  <script src="js/randevu.js" defer></script>
+</head>
+<body>
+
+  <!-- ================= ORTAK ÜST BİLGİ ================= -->
+  <header class="ust-bilgi">
+    <a href="index.html" class="logo">Kapaksız</a>
+
+    <button class="menu-dugmesi" type="button" aria-expanded="false" aria-controls="ana-menu" aria-label="Menüyü aç">
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+    </button>
+
+    <nav id="ana-menu" class="ana-menu" aria-label="Ana menü">
+      <ul>
+        <li><a href="index.html">Ana sayfa</a></li>
+        <li><a href="randevu.html" aria-current="page">Kör randevu</a></li>
+        <li><a href="pasaport.html">Okuma pasaportum</a></li>
+        <li><a href="iletisim.html">Kitap öner</a></li>
+      </ul>
+    </nav>
+
+    <button class="tema-dugmesi" type="button" aria-label="Karanlık modu aç/kapat">◐</button>
+  </header>
+
+  <main>
+    <section class="randevu-giris" aria-labelledby="randevu-baslik">
+      <h1 id="randevu-baslik">Kör randevu</h1>
+      <p>Her paketin üstünde sadece ilk cümle var. İçini merak ettiğin paketi aç.</p>
+    </section>
+
+    <!-- Arama ve filtre alanı. role="search": Ekran okuyucuya bunun bir arama bölgesi olduğunu söyler.
+         Gönderme yok: JS, "input" ve "change" olaylarıyla kartları anında süzecek (Aşama 4). -->
+    <section class="arac-cubugu" role="search" aria-label="Paketleri ara ve süz">
+      <div class="form-alani">
+        <label for="arama">İlk cümlede ara</label>
+        <input type="search" id="arama" name="arama" placeholder="ör. gece, deniz, mektup">
+      </div>
+
+      <div class="form-alani">
+        <label for="konu-filtresi">Ruh hali</label>
+        <!-- Seçenekler moods.json'dan JS ile doldurulacak. Şimdilik sadece "Hepsi" var. -->
+        <select id="konu-filtresi" name="konu">
+          <option value="">Hepsi</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Durum mesajları: "Yükleniyor…" ve hata. aria-live, değişince ekran okuyucuya duyurur.
+         hidden niteliği: Öğe başta gizli. JS gerektiğinde kaldıracak. -->
+    <p id="yukleniyor" class="durum durum-yukleniyor" aria-live="polite" hidden>Paketler hazırlanıyor…</p>
+
+    <div id="hata-kutusu" class="durum durum-hata" role="alert" hidden>
+      <p>Paketler getirilemedi. İnternet bağlantını kontrol edip tekrar dene.</p>
+      <button type="button" id="tekrar-dene" class="dugme">Tekrar dene</button>
+    </div>
+
+    <!-- Kartlar buraya gelecek. Open Library'den fetch ile gelen her kitap için JS
+         bir <article class="kitap-karti"> üretecek. Kapak resminin alt metni de
+         kitabın adıyla JS tarafında verilecek. -->
+    <section aria-labelledby="paketler-baslik">
+      <h2 id="paketler-baslik" class="gorsel-gizli">Paketler</h2>
+      <div id="kitap-kartlari" class="kart-izgara"></div>
+      <p id="sonuc-yok" class="durum" hidden>Aramana uyan paket bulunamadı.</p>
+    </section>
+  </main>
+
+  <!-- ================= ORTAK ALT BİLGİ ================= -->
+  <footer class="alt-bilgi">
+    <p>Kapaksız · CEN303 Web Mobil Programlama final projesi</p>
+    <p>Kitap verileri: <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a></p>
+  </footer>
+
+</body>
+</html>

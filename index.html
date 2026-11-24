@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!-- lang="tr": Ekran okuyucular metni Türkçe okur, tarayıcı da heceleme ve tireleme işini buna göre yapar. -->
+<html lang="tr">
+<head>
+  <!-- Türkçe karakterlerin (ç, ğ, ı, ö, ş, ü) bozulmadan görünmesi için -->
+  <meta charset="UTF-8">
+  <!-- Ödev şartı: meta viewport. Bu satır olmazsa telefon sayfayı masaüstü genişliğinde çizip küçültür,
+       medya sorgularımız da hiç çalışmaz. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kapaksız: Kitaplarla kör randevu. Kapağı değil, ilk cümleyi gör.">
+  <title>Kapaksız | Kitaplarla kör randevu</title>
+
+  <!-- Ödev şartı: tek harici CSS dosyası. Dört sayfa da aynı dosyayı kullanır. -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- defer: HTML tamamen okunduktan sonra çalışır. Böylece JS, aradığı öğeleri sayfada hazır bulur. -->
+  <script src="js/main.js" defer></script>
+  <!-- Sayfaya özel kod. defer'li betikler yazıldıkları sırayla çalışır, main.js hep önce gelir. -->
+  <script src="js/anasayfa.js" defer></script>
+</head>
+<body>
+
+  <!-- ================= ORTAK ÜST BİLGİ =================
+       Bu <header> bloğu dört sayfada da birebir aynı olacak.
+       Tek fark: aktif sayfanın linkinde aria-current="page" bulunur. -->
+  <header class="ust-bilgi">
+    <a href="index.html" class="logo">Kapaksız</a>
+
+    <!-- Hamburger menü düğmesi. Sadece mobilde görünecek (Aşama 3, CSS).
+         aria-expanded: Menünün açık mı kapalı mı olduğunu ekran okuyucuya bildirir. JS bunu değiştirecek (Aşama 4). -->
+    <button class="menu-dugmesi" type="button" aria-expanded="false" aria-controls="ana-menu" aria-label="Menüyü aç">
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+    </button>
+
+    <!-- <nav>: "Bu bir gezinme menüsüdür" anlamı taşır. <div> bu bilgiyi vermez. -->
+    <nav id="ana-menu" class="ana-menu" aria-label="Ana menü">
+      <ul>
+        <li><a href="index.html" aria-current="page">Ana sayfa</a></li>
+        <li><a href="randevu.html">Kör randevu</a></li>
+        <li><a href="pasaport.html">Okuma pasaportum</a></li>
+        <li><a href="iletisim.html">Kitap öner</a></li>
+      </ul>
+    </nav>
+
+    <button class="tema-dugmesi" type="button" aria-label="Karanlık modu aç/kapat">◐</button>
+  </header>
+
+  <!-- <main>: Sayfanın asıl içeriği. Her sayfada yalnızca bir tane olur. -->
+  <main>
+
+    <!-- Karşılama bölümü. aria-labelledby, bölümü başlığıyla ilişkilendirir. -->
+    <section class="karsilama" aria-labelledby="karsilama-baslik">
+      <h1 id="karsilama-baslik">Kapağına göre yargılama.</h1>
+      <p>Burada kitaplar paketli gelir. Sadece ilk cümlesini görürsün. Beğenirsen paketi aç.</p>
+      <a href="randevu.html" class="dugme">Kör randevuya çık</a>
+    </section>
+
+    <!-- Ruh hali kartları. İçi şimdilik boş: Kartları Aşama 4'te JavaScript,
+         data/moods.json dosyasını okuyup createElement ile üretecek. -->
+    <section class="ruh-hali" aria-labelledby="ruh-hali-baslik">
+      <h2 id="ruh-hali-baslik">Bugün nasıl hissediyorsun?</h2>
+      <p>Bir ruh hali seç, sana uygun paketleri hazırlayalım.</p>
+      <div id="ruh-hali-kartlari" class="kart-izgara">
+        <!-- JS buraya kartları ekleyecek -->
+      </div>
+    </section>
+
+    <!-- Günün kör randevusu: Tek bir paketli kart. JS, kartı bu kutunun içine koyacak.
+         Kart bir <article> olacak (kendi başına anlamlı içerik), ilk cümle de <blockquote> (alıntı). -->
+    <section class="gunun-randevusu" aria-labelledby="gunun-baslik">
+      <h2 id="gunun-baslik">Günün kör randevusu</h2>
+      <div id="gunun-kitabi" aria-live="polite">
+        <p class="durum">Paket hazırlanıyor…</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= ORTAK ALT BİLGİ ================= -->
+  <footer class="alt-bilgi">
+    <p>Kapaksız · CEN303 Web Mobil Programlama final projesi</p>
+    <p>Kitap verileri: <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a></p>
+  </footer>
+
+</body>
+</html>

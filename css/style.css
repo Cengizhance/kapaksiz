@@ -1,25 +1,784 @@
 /* =========================================================
    Kapaksız - tek stil dosyası (ödev şartı: tek harici CSS)
    Bölümler:
-   1. Değişkenler (:root)
+   1. Değişkenler (:root) ve karanlık mod
    2. Temel ayarlar
    3. Üst bilgi ve menü
-   4. Sayfa bölümleri
-   5. Kartlar
+   4. Sayfa bölümleri ve düğmeler
+   5. Kartlar (ruh hali, kitap paketi, mühür)
    6. Form
    7. Alt bilgi
    8. Medya sorguları (tablet, masaüstü)
+
+   Yaklaşım: "Önce mobil". Temel kurallar telefona göre yazılır,
+   ekran büyüdükçe medya sorgularıyla genişletilir.
    ========================================================= */
 
-/* 1. Değişkenler: renkleri ve ölçüleri tek yerde tutarız.
-   Karanlık modda sadece bu değerleri değiştirmemiz yeterli olacak. */
+
+/* ---------------------------------------------------------
+   1. Değişkenler: renkleri ve ölçüleri tek yerde tutarız.
+   Karanlık modda sadece bu değerleri değiştirmemiz yeterli.
+   --------------------------------------------------------- */
 :root {
   --renk-zemin: #f6f1e7;      /* eski kâğıt rengi */
+  --renk-yuzey: #fffaf0;      /* kartların zemini, zeminden biraz açık */
   --renk-metin: #2b2622;
+  --renk-soluk: #6b625a;      /* ikincil metinler */
   --renk-vurgu: #b5523b;      /* mühür kırmızısı */
+  --renk-vurgu-koyu: #8e3e2c;
   --renk-paket: #c9a77c;      /* ambalaj kâğıdı */
+  --renk-sicim: #7a5c3a;      /* paketin sicimi */
+  --renk-hata: #b3261e;
+  --renk-basari: #2e7d4f;
+  --renk-cizgi: #ddd3c2;
+
   --yazi-govde: "Georgia", serif;
+  --yazi-baslik: "Georgia", serif;
+
   --bosluk: 1rem;
   --kose: 8px;
+  --golge: 0 2px 8px rgba(43, 38, 34, 0.12);
+  --golge-buyuk: 0 8px 24px rgba(43, 38, 34, 0.18);
   --gecis: 0.3s ease;
+  --icerik-genisligi: 1100px;
+}
+
+/* Karanlık mod: JS, <html> öğesine data-tema="karanlik" ekleyince
+   bu değerler yukarıdakilerin yerine geçer. Başka hiçbir kural değişmez. */
+:root[data-tema="karanlik"] {
+  --renk-zemin: #1d1a17;
+  --renk-yuzey: #29241f;
+  --renk-metin: #ece4d6;
+  --renk-soluk: #b0a594;
+  --renk-vurgu: #e07a5f;
+  --renk-vurgu-koyu: #c4634a;
+  --renk-paket: #8a6d4b;
+  --renk-sicim: #d8b98c;
+  --renk-hata: #f28b82;
+  --renk-basari: #7fd1a0;
+  --renk-cizgi: #3d362f;
+  --golge: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --golge-buyuk: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+
+/* ---------------------------------------------------------
+   2. Temel ayarlar
+   --------------------------------------------------------- */
+
+/* box-sizing: Kenarlık ve iç boşluk, genişliğe dahil edilir. Ölçüler öngörülebilir olur. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  /* Flexbox ile alt bilgiyi her zaman sayfanın en altına iteriz. */
+  display: flex;
+  flex-direction: column;
+  background-color: var(--renk-zemin);
+  color: var(--renk-metin);
+  font-family: var(--yazi-govde);
+  line-height: 1.6;
+  transition: background-color var(--gecis), color var(--gecis);
+}
+
+main {
+  flex: 1;                 /* Kalan boşluğun tamamını main kaplar */
+  width: 100%;
+  max-width: var(--icerik-genisligi);
+  margin: 0 auto;
+  padding: var(--bosluk);
+}
+
+h1,
+h2 {
+  font-family: var(--yazi-baslik);
+  line-height: 1.2;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+
+a {
+  color: var(--renk-vurgu);
+  transition: color var(--gecis);
+}
+
+a:hover {
+  color: var(--renk-vurgu-koyu);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Klavye ile gezinen kullanıcılar nerede olduklarını görsün diye belirgin odak çerçevesi.
+   :focus-visible sadece klavye odağında çalışır, fare tıklamasında çerçeve çıkmaz. */
+:focus-visible {
+  outline: 3px solid var(--renk-vurgu);
+  outline-offset: 3px;
+}
+
+/* Gözle görünmeyen ama ekran okuyucunun okuduğu metin (ör. "Paketler" başlığı). */
+.gorsel-gizli {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+
+/* ---------------------------------------------------------
+   3. Üst bilgi ve menü (Flexbox)
+   --------------------------------------------------------- */
+.ust-bilgi {
+  display: flex;
+  flex-wrap: wrap;          /* Mobilde menü alt satıra geçebilsin */
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem var(--bosluk);
+  background-color: var(--renk-yuzey);
+  border-bottom: 1px solid var(--renk-cizgi);
+  box-shadow: var(--golge);
+  position: sticky;         /* Kaydırırken üstte sabit kalır */
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  margin-right: auto;       /* Logoyu sola, geri kalan her şeyi sağa iter */
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--renk-metin);
+  letter-spacing: 0.02em;
+}
+
+/* Mobilde sıralama: logo, tema düğmesi, hamburger. Menü en alta, tam genişlikte. */
+.tema-dugmesi { order: 1; }
+.menu-dugmesi { order: 2; }
+.ana-menu     { order: 3; flex-basis: 100%; }
+
+.tema-dugmesi,
+.menu-dugmesi {
+  background: none;
+  border: 1px solid var(--renk-cizgi);
+  border-radius: var(--kose);
+  color: var(--renk-metin);
+  cursor: pointer;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.2rem;
+  transition: background-color var(--gecis), border-color var(--gecis);
+}
+
+.tema-dugmesi:hover,
+.menu-dugmesi:hover {
+  background-color: var(--renk-zemin);
+  border-color: var(--renk-vurgu);
+}
+
+/* Hamburger: Üç çizgi alt alta */
+.menu-dugmesi {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.menu-cizgi {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: currentColor;
+  transition: transform var(--gecis), opacity var(--gecis);
+}
+
+/* Menü açıkken (aria-expanded="true") çizgiler X şekline döner. */
+.menu-dugmesi[aria-expanded="true"] .menu-cizgi:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.menu-dugmesi[aria-expanded="true"] .menu-cizgi:nth-child(2) {
+  opacity: 0;
+}
+.menu-dugmesi[aria-expanded="true"] .menu-cizgi:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobil menü: Varsayılan olarak kapalı. max-height ile açılırken kayarak iner.
+   (display: none geçiş animasyonu yapamadığı için max-height kullanıyoruz.) */
+.ana-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--gecis);
+}
+
+/* JS, düğmeye tıklanınca menüye "acik" sınıfını ekleyecek (classList.toggle). */
+.ana-menu.acik {
+  max-height: 20rem;
+}
+
+.ana-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ana-menu a {
+  display: block;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--kose);
+  text-decoration: none;
+  color: var(--renk-metin);
+  transition: background-color var(--gecis), color var(--gecis);
+}
+
+.ana-menu a:hover,
+.ana-menu a:focus-visible {
+  background-color: var(--renk-zemin);
+  color: var(--renk-vurgu);
+}
+
+/* Aktif sayfa: HTML'deki aria-current="page" niteliğini seçici olarak kullanıyoruz. */
+.ana-menu a[aria-current="page"] {
+  color: var(--renk-vurgu);
+  font-weight: bold;
+  box-shadow: inset 3px 0 0 var(--renk-vurgu);
+}
+
+
+/* ---------------------------------------------------------
+   4. Sayfa bölümleri ve düğmeler
+   --------------------------------------------------------- */
+section {
+  margin-block: 2rem;
+}
+
+.karsilama {
+  text-align: center;
+  padding: 2rem var(--bosluk);
+}
+
+.karsilama p {
+  max-width: 40ch;          /* Satır çok uzamasın, okunabilir kalsın */
+  margin-inline: auto;
+  color: var(--renk-soluk);
+}
+
+.dugme {
+  display: inline-block;
+  padding: 0.7rem 1.4rem;
+  border: none;
+  border-radius: var(--kose);
+  background-color: var(--renk-vurgu);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--gecis), transform var(--gecis);
+}
+
+.dugme:hover {
+  background-color: var(--renk-vurgu-koyu);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.dugme:active {
+  transform: translateY(0);
+}
+
+.dugme-ikincil {
+  background-color: transparent;
+  color: var(--renk-vurgu);
+  border: 1px solid var(--renk-vurgu);
+}
+
+.dugme-ikincil:hover {
+  background-color: var(--renk-vurgu);
+}
+
+/* Yükleniyor, hata ve "sonuç yok" mesajları */
+.durum {
+  text-align: center;
+  color: var(--renk-soluk);
+  padding: var(--bosluk);
+}
+
+/* hidden niteliği bazı display kurallarınca ezilebilir, garantiye alıyoruz. */
+[hidden] {
+  display: none !important;
+}
+
+.durum-yukleniyor::before {
+  content: "";
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+  vertical-align: -2px;
+  border: 2px solid var(--renk-cizgi);
+  border-top-color: var(--renk-vurgu);
+  border-radius: 50%;
+  animation: don 0.8s linear infinite;
+}
+
+@keyframes don {
+  to { transform: rotate(360deg); }
+}
+
+.durum-hata {
+  color: var(--renk-hata);
+  border: 1px solid var(--renk-hata);
+  border-radius: var(--kose);
+}
+
+/* Randevu sayfasındaki arama ve filtre çubuğu */
+.arac-cubugu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bosluk);
+}
+
+
+/* ---------------------------------------------------------
+   5. Kartlar (Grid)
+   --------------------------------------------------------- */
+
+/* Izgara: auto-fill + minmax ile sütun sayısı ekrana göre kendiliğinden ayarlanır.
+   Medya sorgusunda sadece boşluğu büyütmemiz yeterli. */
+.kart-izgara {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--bosluk);
+  padding: 0;
+  list-style: none;
+}
+
+/* Ruh hali kartı (JS ile <a class="ruh-hali-karti"> olarak üretilir, randevu sayfasına götürür) */
+.ruh-hali-karti {
+  display: block;
+  text-decoration: none;
+  text-align: left;
+  padding: 1.25rem;
+  border: 1px solid var(--renk-cizgi);
+  border-radius: var(--kose);
+  background-color: var(--renk-yuzey);
+  color: var(--renk-metin);
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: var(--golge);
+  transition: transform var(--gecis), box-shadow var(--gecis), border-color var(--gecis);
+}
+
+.ruh-hali-karti:hover,
+.ruh-hali-karti:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: var(--golge-buyuk);
+  border-color: var(--renk-vurgu);
+  color: var(--renk-metin);   /* Genel a:hover rengi kartın yazısını boyamasın */
+}
+
+.ruh-hali-karti h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+}
+
+.ruh-hali-karti p {
+  margin: 0;
+  color: var(--renk-soluk);
+  font-size: 0.95rem;
+}
+
+/* --- Kitap paketi: Dönen kart ---
+   JS'nin üreteceği yapı:
+   <article class="kitap-karti">
+     <div class="kart-ic">
+       <div class="kart-yuz kart-on">  paket + ilk cümle + etiketler </div>
+       <div class="kart-yuz kart-arka"> kapak + isim + yazar </div>
+     </div>
+   </article>
+   Karta "acik" sınıfı eklenince .kart-ic 180 derece döner. */
+.kitap-karti {
+  perspective: 1000px;      /* 3B derinlik hissi verir */
+  min-height: 400px;
+}
+
+.kart-ic {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.kitap-karti.acik .kart-ic {
+  transform: rotateY(180deg);
+}
+
+.kart-yuz {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border-radius: var(--kose);
+  box-shadow: var(--golge);
+  backface-visibility: hidden;   /* Arkası dönükken görünmesin */
+}
+
+/* Ön yüz: Ambalaj kâğıdı ve çapraz sicim (iki doğrusal gradyan ile çizildi) */
+.kart-on {
+  background:
+    linear-gradient(90deg, transparent calc(50% - 3px), var(--renk-sicim) calc(50% - 3px),
+                    var(--renk-sicim) calc(50% + 3px), transparent calc(50% + 3px)),
+    linear-gradient(0deg, transparent calc(50% - 3px), var(--renk-sicim) calc(50% - 3px),
+                    var(--renk-sicim) calc(50% + 3px), transparent calc(50% + 3px)),
+    var(--renk-paket);
+  color: #2b2622;
+  cursor: pointer;
+  transition: box-shadow var(--gecis), transform var(--gecis);
+}
+
+.kitap-karti:hover .kart-on {
+  box-shadow: var(--golge-buyuk);
+}
+
+/* İlk cümle, sicimin üstünde okunabilsin diye kâğıt bir etiket içinde durur */
+.ilk-cumle {
+  margin: 0;
+  padding: 1rem;
+  background-color: var(--renk-yuzey);
+  color: var(--renk-metin);
+  border-radius: 4px;
+  font-style: italic;
+  box-shadow: var(--golge);
+}
+
+.ilk-cumle p {
+  margin: 0;
+}
+
+.etiketler {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.etiketler li {
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background-color: var(--renk-yuzey);
+  color: var(--renk-metin);
+  font-size: 0.8rem;
+}
+
+/* Arka yüz: Kapak ve isim. Başlangıçta ters durur, kart dönünce düzelir. */
+.kart-arka {
+  transform: rotateY(180deg);
+  align-items: center;
+  text-align: center;
+  background-color: var(--renk-yuzey);
+}
+
+.kart-arka img {
+  max-height: 200px;
+  width: auto;
+  border-radius: 4px;
+  box-shadow: var(--golge);
+}
+
+.kart-arka h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.kart-arka p {
+  margin: 0;
+  color: var(--renk-soluk);
+}
+
+/* Günün randevusu: Tek kart, ortada ve sınırlı genişlikte */
+.gunun-randevusu .kitap-karti {
+  max-width: 360px;
+  margin-inline: auto;
+}
+
+/* Arka yüzdeki "mühürle" ve "kapat" düğmeleri */
+.kart-dugmeleri {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.kart-dugmeleri .dugme {
+  padding: 0.5rem 0.9rem;
+  font-size: 0.9rem;
+}
+
+.dugme:disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+}
+
+/* --- Mühür (pasaport sayfası) --- */
+.muhur-listesi li {
+  display: flex;
+  align-items: center;
+  gap: var(--bosluk);
+  padding: var(--bosluk);
+  background-color: var(--renk-yuzey);
+  border: 1px dashed var(--renk-cizgi);
+  border-radius: var(--kose);
+}
+
+/* Yuvarlak kırmızı mühür. JS her yeni kayıtta bunu ekleyecek, animasyon kendiliğinden çalışır. */
+.muhur {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border: 3px double var(--renk-vurgu);
+  border-radius: 50%;
+  color: var(--renk-vurgu);
+  font-size: 0.7rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  transform: rotate(-12deg);
+  animation: muhur-bas 0.5s ease-out;
+}
+
+/* Mühür büyükten küçüğe "basılır" ve hafif sekerek yerine oturur. */
+@keyframes muhur-bas {
+  0%   { transform: scale(2.5) rotate(-30deg); opacity: 0; }
+  60%  { transform: scale(0.9) rotate(-10deg); opacity: 1; }
+  100% { transform: scale(1)   rotate(-12deg); }
+}
+
+/* İlerleme çubuğu */
+.ilerleme {
+  margin-top: var(--bosluk);
+}
+
+.ilerleme progress {
+  width: 100%;
+  height: 1rem;
+  accent-color: var(--renk-vurgu);
+}
+
+
+/* ---------------------------------------------------------
+   6. Form
+   --------------------------------------------------------- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bosluk);
+  max-width: 600px;
+}
+
+.form-alani {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+label {
+  font-weight: bold;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--renk-cizgi);
+  border-radius: var(--kose);
+  background-color: var(--renk-yuzey);
+  color: var(--renk-metin);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color var(--gecis), box-shadow var(--gecis);
+}
+
+textarea {
+  resize: vertical;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: var(--renk-soluk);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--renk-vurgu);
+  box-shadow: 0 0 0 3px rgba(181, 82, 59, 0.25);
+}
+
+/* JS hatalı alana "hatali" sınıfını ekleyecek (classList.add) */
+.hatali {
+  border-color: var(--renk-hata);
+}
+
+.hata-mesaji {
+  min-height: 1.2em;         /* Mesaj gelince form aşağı zıplamasın */
+  color: var(--renk-hata);
+  font-size: 0.9rem;
+}
+
+.basari-mesaji {
+  margin: 0;
+  color: var(--renk-basari);
+  font-weight: bold;
+}
+
+.basari-mesaji:not(:empty) {
+  animation: belir 0.4s ease-out;
+}
+
+@keyframes belir {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.form > .dugme {
+  align-self: flex-start;
+}
+
+
+/* ---------------------------------------------------------
+   7. Alt bilgi
+   --------------------------------------------------------- */
+.alt-bilgi {
+  padding: 1.5rem var(--bosluk);
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--renk-soluk);
+  border-top: 1px solid var(--renk-cizgi);
+  background-color: var(--renk-yuzey);
+}
+
+.alt-bilgi p {
+  margin: 0.25rem 0;
+}
+
+
+/* ---------------------------------------------------------
+   8. Medya sorguları (ödev şartı: en az 2 kırılma noktası)
+   --------------------------------------------------------- */
+
+/* Kırılma noktası 1: Tablet (600px ve üstü) */
+@media (min-width: 600px) {
+  h1 { font-size: 2.5rem; }
+
+  main {
+    padding: 1.5rem;
+  }
+
+  /* Arama ve filtre yan yana */
+  .arac-cubugu {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .arac-cubugu .form-alani:first-child {
+    flex: 2;
+  }
+
+  .arac-cubugu .form-alani:last-child {
+    flex: 1;
+  }
+
+  /* Pasaport: Hedef alanı ve düğme yan yana */
+  .form-satir {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .form-satir .form-alani {
+    flex: 1;
+  }
+
+  .form-satir .dugme {
+    margin-top: 1.9rem;      /* Etiketin yüksekliği kadar aşağı, input ile hizalı */
+  }
+}
+
+/* Kırılma noktası 2: Masaüstü (900px ve üstü) */
+@media (min-width: 900px) {
+  h1 { font-size: 3rem; }
+
+  .ust-bilgi {
+    flex-wrap: nowrap;
+    padding-inline: 2rem;
+  }
+
+  /* Hamburger'e gerek yok, menü her zaman görünür ve yatay */
+  .menu-dugmesi {
+    display: none;
+  }
+
+  .ana-menu {
+    order: 0;
+    flex-basis: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .ana-menu ul {
+    flex-direction: row;
+    padding: 0;
+  }
+
+  .ana-menu a[aria-current="page"] {
+    box-shadow: inset 0 -3px 0 var(--renk-vurgu);
+  }
+
+  .tema-dugmesi {
+    order: 1;
+  }
+
+  .kart-izgara {
+    gap: 1.5rem;
+  }
+
+  .karsilama {
+    padding-block: 4rem;
+  }
+}
+
+/* Hareket hassasiyeti olan kullanıcılar için animasyonları kısalt. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
