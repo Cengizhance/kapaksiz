@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kapaksız: Sadece ilk cümlesini görerek bir kitapla kör randevuya çık.">
+  <title>Kapaksız | Kör Randevu</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="ust-bilgi">
+    <a href="index.html" class="logo">Kapaksız</a>
+
+    <button class="tema-dugmesi" type="button" aria-label="Karanlık modu aç/kapat">🌙</button>
+
+    <button class="menu-dugmesi" type="button" aria-expanded="false" aria-controls="ana-menu" aria-label="Menüyü aç">
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+    </button>
+
+    <nav class="ana-menu" id="ana-menu" aria-label="Ana menü">
+      <ul>
+        <li><a href="index.html">Ana Sayfa</a></li>
+        <li><a href="randevu.html" aria-current="page">Kör Randevu</a></li>
+        <li><a href="pasaport.html">Pasaportum</a></li>
+        <li><a href="iletisim.html">Kitap Öner</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="sayfa-basi">
+      <h1>Kör Randevu</h1>
+      <p>Bir ruh hali seç, paketler gelsin. Sadece ilk cümleyi okuyarak birini seç ve paketi aç.</p>
+    </section>
+
+    <!-- Arama ve filtre formu: Sayfayı yenilemeden sonuçları süzecek (Ders 11) -->
+    <section class="filtreler" aria-label="Arama ve filtre">
+      <form class="filtre-formu" id="filtre-formu" role="search">
+        <div class="form-alani">
+          <label for="ruh-hali-secimi">Ruh hali</label>
+          <select id="ruh-hali-secimi" name="ruhHali">
+            <option value="">Bir ruh hali seç</option>
+            <!-- Seçenekler JavaScript ile data/moods.json dosyasından eklenecek (Ders 9) -->
+          </select>
+        </div>
+
+        <div class="form-alani">
+          <label for="arama-kutusu">İlk cümlede ara</label>
+          <input type="search" id="arama-kutusu" name="arama" placeholder="ör. night, letter, sea">
+        </div>
+      </form>
+    </section>
+
+    <!-- Yükleniyor ve hata mesajları buraya yazılacak (Ders 10).
+         aria-live: İçerik değişince ekran okuyucu yeni mesajı kendiliğinden okur. -->
+    <p class="durum" id="durum-mesaji" aria-live="polite"></p>
+
+    <section aria-labelledby="paketler-baslik">
+      <h2 id="paketler-baslik">Paketler</h2>
+      <div class="paket-listesi" id="paket-listesi">
+        <!-- Kitap paketleri JavaScript ile Open Library'den oluşturulacak (Ders 10) -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="alt-bilgi">
+    <p>Kapaksız · CEN303 Web Mobil Programlama final projesi · 2026</p>
+    <p>Kitap verileri: <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a></p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

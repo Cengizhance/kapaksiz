@@ -9,3 +9,4 @@ Kullanılan araç: Claude (Anthropic), Claude Code masaüstü uygulaması.
 | --- | --- | --- |
 | 20.11.2026 | Konu fikirleri, sayfa planı ve yol haritası | Konuyu (kör randevu kitap sitesi) ve site adını (Kapaksız) ben seçtim |
 | 25.11.2026 | Ders 1: `index.html` iskeleti ve klasör yapısı Claude tarafından satır satır açıklamalı olarak yazıldı | Açıklamaları okudum, sayfayı tarayıcıda test ettim, commit'i attım |
+| 25.11.2026 | Ders 2: `randevu.html`, `pasaport.html`, `iletisim.html` sayfaları ve `img/paket.svg` görseli Claude tarafından açıklamalı olarak yazıldı | Açıklamaları okudum, sayfaları tarayıcıda test ettim, commit'i attım |

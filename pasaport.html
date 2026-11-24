@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kapaksız: Okuduğun kitapların mühürlendiği okuma pasaportu.">
+  <title>Kapaksız | Okuma Pasaportum</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="ust-bilgi">
+    <a href="index.html" class="logo">Kapaksız</a>
+
+    <button class="tema-dugmesi" type="button" aria-label="Karanlık modu aç/kapat">🌙</button>
+
+    <button class="menu-dugmesi" type="button" aria-expanded="false" aria-controls="ana-menu" aria-label="Menüyü aç">
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+    </button>
+
+    <nav class="ana-menu" id="ana-menu" aria-label="Ana menü">
+      <ul>
+        <li><a href="index.html">Ana Sayfa</a></li>
+        <li><a href="randevu.html">Kör Randevu</a></li>
+        <li><a href="pasaport.html" aria-current="page">Pasaportum</a></li>
+        <li><a href="iletisim.html">Kitap Öner</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="sayfa-basi">
+      <h1>Okuma Pasaportum</h1>
+      <p>Paketini açıp "Okudum" dediğin her kitap pasaportuna bir mühür olarak basılır.</p>
+    </section>
+
+    <!-- Yıllık hedef: Kaydedilen hedef localStorage'da tutulacak (Ders 12) -->
+    <section class="hedef" aria-labelledby="hedef-baslik">
+      <h2 id="hedef-baslik">Bu yılki hedefim</h2>
+
+      <form class="hedef-formu" id="hedef-formu">
+        <div class="form-alani">
+          <label for="hedef-sayisi">Bu yıl kaç kitap okumak istiyorsun?</label>
+          <input type="number" id="hedef-sayisi" name="hedef" min="1" max="365" required>
+        </div>
+        <button type="submit" class="dugme">Hedefi kaydet</button>
+      </form>
+
+      <!-- <progress>: Tarayıcının hazır ilerleme çubuğu. value / max oranında dolar. -->
+      <p class="ilerleme-metni" id="ilerleme-metni">Henüz bir hedef belirlemedin.</p>
+      <progress id="hedef-cubugu" value="0" max="1" aria-labelledby="ilerleme-metni"></progress>
+    </section>
+
+    <section class="muhurler" aria-labelledby="muhurler-baslik">
+      <h2 id="muhurler-baslik">Mühürlerim</h2>
+      <ul class="muhur-listesi" id="muhur-listesi">
+        <!-- Mühürler JavaScript ile localStorage'daki kayıtlardan oluşturulacak (Ders 12) -->
+      </ul>
+      <p class="bos-durum" id="bos-durum">Pasaportun henüz boş. İlk kör randevuna çıkmaya ne dersin?</p>
+      <button type="button" class="dugme dugme-ikincil" id="sifirla-dugmesi">Pasaportu sıfırla</button>
+    </section>
+  </main>
+
+  <footer class="alt-bilgi">
+    <p>Kapaksız · CEN303 Web Mobil Programlama final projesi · 2026</p>
+    <p>Kitap verileri: <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a></p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

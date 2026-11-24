@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kapaksız: Bir yabancıya paketleyeceğin kitabı bize öner.">
+  <title>Kapaksız | Kitap Öner</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="ust-bilgi">
+    <a href="index.html" class="logo">Kapaksız</a>
+
+    <button class="tema-dugmesi" type="button" aria-label="Karanlık modu aç/kapat">🌙</button>
+
+    <button class="menu-dugmesi" type="button" aria-expanded="false" aria-controls="ana-menu" aria-label="Menüyü aç">
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+    </button>
+
+    <nav class="ana-menu" id="ana-menu" aria-label="Ana menü">
+      <ul>
+        <li><a href="index.html">Ana Sayfa</a></li>
+        <li><a href="randevu.html">Kör Randevu</a></li>
+        <li><a href="pasaport.html">Pasaportum</a></li>
+        <li><a href="iletisim.html" aria-current="page">Kitap Öner</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="sayfa-basi">
+      <h1>Kitap Öner</h1>
+      <p>Bir yabancıya hangi kitabı paketlerdin? Bize ilk cümlesini yaz, belki bir sonraki kör randevu onunla olur.</p>
+    </section>
+
+    <section class="oneri" aria-labelledby="form-baslik">
+      <h2 id="form-baslik">Öneri formu</h2>
+
+      <!-- Doğrulama nitelikleri (required, minlength, type="email") tarayıcıya kuralları söyler.
+           Ders 13'te JavaScript ile kendi hata mesajlarımızı alanların yanında göstereceğiz. -->
+      <form class="oneri-formu" id="oneri-formu">
+        <div class="form-alani">
+          <label for="ad">Adın</label>
+          <input type="text" id="ad" name="ad" required minlength="2" maxlength="50" autocomplete="name">
+          <span class="hata-mesaji" id="ad-hata" aria-live="polite"></span>
+        </div>
+
+        <div class="form-alani">
+          <label for="eposta">E-posta adresin</label>
+          <input type="email" id="eposta" name="eposta" required autocomplete="email">
+          <span class="hata-mesaji" id="eposta-hata" aria-live="polite"></span>
+        </div>
+
+        <div class="form-alani">
+          <label for="kitap-adi">Kitabın adı</label>
+          <input type="text" id="kitap-adi" name="kitapAdi" required minlength="2" maxlength="100">
+          <span class="hata-mesaji" id="kitap-adi-hata" aria-live="polite"></span>
+        </div>
+
+        <div class="form-alani">
+          <label for="ruh-hali">Hangi ruh haline uygun?</label>
+          <select id="ruh-hali" name="ruhHali" required>
+            <option value="">Seçiniz</option>
+            <option value="yagmurlu-aksam">Yağmurlu bir akşam</option>
+            <option value="uzun-yolculuk">Uzun bir yolculuk</option>
+            <option value="kalp-kirikligi">Kalbim biraz kırık</option>
+            <option value="dusunmek">Düşünmek istiyorum</option>
+            <option value="gulmek">Biraz gülmeliyim</option>
+            <option value="uykusuz-gece">Uykusuz bir gece</option>
+            <option value="baska-dunya">Başka bir dünyaya kaçmak</option>
+            <option value="nostalji">Eski zamanlar</option>
+          </select>
+          <span class="hata-mesaji" id="ruh-hali-hata" aria-live="polite"></span>
+        </div>
+
+        <div class="form-alani">
+          <label for="ilk-cumle">Kitabın ilk cümlesi</label>
+          <textarea id="ilk-cumle" name="ilkCumle" rows="4" required minlength="10" maxlength="500"></textarea>
+          <span class="hata-mesaji" id="ilk-cumle-hata" aria-live="polite"></span>
+        </div>
+
+        <button type="submit" class="dugme">Öneriyi gönder</button>
+      </form>
+
+      <!-- Başarılı gönderimde JavaScript bu mesajı gösterecek. hidden: Başlangıçta gizli. -->
+      <p class="basari-mesaji" id="basari-mesaji" role="status" hidden></p>
+    </section>
+  </main>
+
+  <footer class="alt-bilgi">
+    <p>Kapaksız · CEN303 Web Mobil Programlama final projesi · 2026</p>
+    <p>Kitap verileri: <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a></p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
