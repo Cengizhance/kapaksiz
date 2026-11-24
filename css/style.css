@@ -1,0 +1,156 @@
+/* =========================================================
+   Kapaksız - tek stil dosyası (ödev şartı: tek harici CSS)
+
+   Bölümler:
+   1. Değişkenler (:root) ve karanlık mod
+   2. Temel ayarlar
+   3. Üst bilgi ve menü            (Ders 4)
+   4. Sayfa bölümleri ve düğmeler  (Ders 5-6)
+   5. Kartlar                      (Ders 5-6)
+   6. Form                         (Ders 6)
+   7. Alt bilgi
+   8. Medya sorguları              (Ders 5)
+
+   Yaklaşım: "Önce mobil". Temel kurallar telefona göre yazılır,
+   ekran büyüdükçe medya sorgularıyla genişletilir.
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   1. Değişkenler
+   Renkleri ve ölçüleri tek yerde tutarız. Bir rengi burada
+   değiştirince sitenin her yerinde değişir.
+   --------------------------------------------------------- */
+:root {
+  /* Renkler */
+  --renk-zemin: #f6f1e7;        /* eski kâğıt rengi */
+  --renk-yuzey: #fffaf0;        /* kartların zemini, zeminden biraz açık */
+  --renk-metin: #2b2622;
+  --renk-soluk: #6b625a;        /* ikincil metinler */
+  --renk-vurgu: #b5523b;        /* mühür kırmızısı */
+  --renk-vurgu-koyu: #8e3e2c;
+  --renk-paket: #c9a77c;        /* ambalaj kâğıdı */
+  --renk-sicim: #7a5c3a;        /* paketin sicimi */
+  --renk-hata: #b3261e;
+  --renk-basari: #2e7d4f;
+  --renk-cizgi: #ddd3c2;
+
+  /* Yazı tipleri (Google Fonts). Font yüklenemezse virgülden sonrakiler devreye girer. */
+  --yazi-govde: "Lora", Georgia, serif;
+  --yazi-baslik: "Special Elite", "Courier New", monospace;
+
+  /* Ölçüler */
+  --bosluk: 1rem;
+  --kose: 8px;
+  --golge: 0 2px 8px rgba(43, 38, 34, 0.12);
+  --golge-buyuk: 0 8px 24px rgba(43, 38, 34, 0.18);
+  --gecis: 0.3s ease;
+  --icerik-genisligi: 1100px;
+}
+
+/* Karanlık mod: JavaScript, <html> öğesine data-tema="karanlik" ekleyince (Ders 8)
+   bu değerler yukarıdakilerin yerine geçer. Başka hiçbir kuralı değiştirmeyiz. */
+:root[data-tema="karanlik"] {
+  --renk-zemin: #1d1a17;
+  --renk-yuzey: #29241f;
+  --renk-metin: #ece4d6;
+  --renk-soluk: #b0a594;
+  --renk-vurgu: #e07a5f;
+  --renk-vurgu-koyu: #c4634a;
+  --renk-paket: #8a6d4b;
+  --renk-sicim: #d8b98c;
+  --renk-hata: #f28b82;
+  --renk-basari: #7fd1a0;
+  --renk-cizgi: #3d362f;
+  --golge: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --golge-buyuk: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+
+/* ---------------------------------------------------------
+   2. Temel ayarlar
+   --------------------------------------------------------- */
+
+/* box-sizing: Kenarlık ve iç boşluk genişliğe dahil edilir.
+   width: 200px dersek öğe gerçekten 200px olur, ölçüler öngörülebilir kalır. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;                      /* Tarayıcının varsayılan 8px kenar boşluğunu kaldır */
+  min-height: 100vh;              /* En az ekran yüksekliği kadar uzun ol */
+  /* İlk Flexbox: Öğeleri alt alta dizer. main büyüyünce footer en alta itilir. */
+  display: flex;
+  flex-direction: column;
+  background-color: var(--renk-zemin);
+  color: var(--renk-metin);
+  font-family: var(--yazi-govde);
+  font-size: 1.0625rem;           /* 17px: Uzun metinlerde okumayı kolaylaştırır */
+  line-height: 1.6;
+  transition: background-color var(--gecis), color var(--gecis);
+}
+
+main {
+  flex: 1;                        /* Kalan boş alanın tamamını kapla */
+  width: 100%;
+  max-width: var(--icerik-genisligi);
+  margin: 0 auto;                 /* Geniş ekranda ortala */
+  padding: var(--bosluk);
+}
+
+h1,
+h2 {
+  font-family: var(--yazi-baslik);
+  font-weight: normal;            /* Daktilo fontu kalın hâlinde bozuk görünür */
+  line-height: 1.2;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+
+a {
+  color: var(--renk-vurgu);
+  transition: color var(--gecis);
+}
+
+a:hover {
+  color: var(--renk-vurgu-koyu);
+}
+
+img {
+  max-width: 100%;                /* Resim, kutusundan asla taşmaz */
+  height: auto;                   /* En-boy oranı bozulmaz */
+  display: block;
+}
+
+/* Klavyeyle gezinen kullanıcılar nerede olduklarını görsün diye belirgin odak çerçevesi.
+   :focus-visible sadece klavye odağında çalışır, fareyle tıklayınca çerçeve çıkmaz. */
+:focus-visible {
+  outline: 3px solid var(--renk-vurgu);
+  outline-offset: 3px;
+}
+
+/* hidden niteliği olan öğe, başka bir kural display verse bile gizli kalsın. */
+[hidden] {
+  display: none !important;
+}
+
+
+/* ---------------------------------------------------------
+   7. Alt bilgi
+   --------------------------------------------------------- */
+.alt-bilgi {
+  padding: 1.5rem var(--bosluk);
+  border-top: 1px solid var(--renk-cizgi);
+  background-color: var(--renk-yuzey);
+  color: var(--renk-soluk);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.alt-bilgi p {
+  margin: 0.25rem 0;
+}
