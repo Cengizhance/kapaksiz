@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kapaksız: Kapağına bakmadan, ilk cümlesiyle kitap seç.">
+  <title>Kapaksız | Ana Sayfa</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="ust-bilgi">
+    <a href="index.html" class="logo">Kapaksız</a>
+
+    <button class="tema-dugmesi" type="button" aria-label="Karanlık modu aç/kapat">🌙</button>
+
+    <button class="menu-dugmesi" type="button" aria-expanded="false" aria-controls="ana-menu" aria-label="Menüyü aç">
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+      <span class="menu-cizgi"></span>
+    </button>
+
+    <nav class="ana-menu" id="ana-menu" aria-label="Ana menü">
+      <ul>
+        <li><a href="index.html" aria-current="page">Ana Sayfa</a></li>
+        <li><a href="randevu.html">Kör Randevu</a></li>
+        <li><a href="pasaport.html">Pasaportum</a></li>
+        <li><a href="iletisim.html">Kitap Öner</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="karsilama">
+      <h1>Kapağına bakma, ilk cümlesine bak.</h1>
+      <p>Her kitap kâğıda sarılı. Sadece ilk cümlesini görürsün. Beğendiğin paketi aç, kitabınla tanış.</p>
+      <a href="randevu.html" class="dugme">Kör randevuya çık</a>
+    </section>
+
+    <section class="ruh-halleri" aria-labelledby="ruh-hali-baslik">
+      <h2 id="ruh-hali-baslik">Bugün nasıl hissediyorsun?</h2>
+      <div class="ruh-hali-listesi" id="ruh-hali-listesi">
+        <!-- Kartlar JavaScript ile data/moods.json dosyasından oluşturulacak (Ders 9) -->
+      </div>
+    </section>
+
+    <section class="gunun-randevusu" aria-labelledby="gunun-randevusu-baslik">
+      <h2 id="gunun-randevusu-baslik">Günün kör randevusu</h2>
+      <div id="gunun-kitabi">
+        <!-- Günün kitabı JavaScript ile Open Library'den gelecek (Ders 10) -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="alt-bilgi">
+    <p>Kapaksız · CEN303 Web Mobil Programlama final projesi · 2026</p>
+    <p>Kitap verileri: <a href="https://openlibrary.org" target="_blank" rel="noopener">Open Library</a></p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
