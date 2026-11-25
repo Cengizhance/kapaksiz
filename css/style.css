@@ -274,6 +274,85 @@ img {
 
 
 /* ---------------------------------------------------------
+   4. Sayfa bölümleri
+   --------------------------------------------------------- */
+section {
+  margin-block: 2rem;             /* Üstte ve altta 2rem boşluk (margin-top + margin-bottom) */
+}
+
+/* Ana sayfanın karşılama bölümü. Mobilde her şey alt alta ve ortalı.
+   Tablette Grid ile resim solda, metin sağda olacak (Bölüm 8). */
+.karsilama {
+  text-align: center;
+}
+
+.karsilama img {
+  margin-inline: auto;            /* Blok öğeyi yatayda ortala (margin-left + margin-right) */
+}
+
+.karsilama p,
+.sayfa-basi p {
+  max-width: 45ch;                /* Satır en fazla ~45 karakter: Gözün takibi kolay */
+  margin-inline: auto;
+  color: var(--renk-soluk);
+}
+
+.sayfa-basi {
+  text-align: center;
+}
+
+
+/* ---------------------------------------------------------
+   5. Kart ızgaraları (CSS Grid)
+   Kartların kendisini JavaScript üretecek (Ders 9, 10, 12).
+   Burada sadece kartların dizileceği ızgarayı tanımlıyoruz.
+   Sütun sayıları ekran büyüdükçe Bölüm 8'de artar.
+   --------------------------------------------------------- */
+.ruh-hali-listesi,
+.paket-listesi,
+.muhur-listesi {
+  display: grid;
+  gap: var(--bosluk);             /* Satırlar ve sütunlar arasında aynı boşluk */
+}
+
+/* Telefonda: Ruh hali kartları küçük, 2 sütun sığar. Paketler büyük, tek sütun. */
+.ruh-hali-listesi {
+  grid-template-columns: repeat(2, 1fr);   /* 2 eşit sütun */
+}
+
+.paket-listesi {
+  grid-template-columns: 1fr;
+}
+
+.muhur-listesi {
+  grid-template-columns: repeat(2, 1fr);
+  list-style: none;               /* <ul> olduğu için madde işaretlerini kaldır */
+  padding: 0;
+}
+
+
+/* ---------------------------------------------------------
+   6. Form düzeni
+   Alanların görünüşü (kenarlık, odak rengi) Ders 6'da eklenecek.
+   --------------------------------------------------------- */
+
+/* Her alan: Etiket üstte, kutu altta, hata mesajı en altta. */
+.form-alani {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: var(--bosluk);
+}
+
+/* Randevu sayfasındaki filtre formu: Telefonda alt alta, tablette yan yana (Bölüm 8). */
+.filtre-formu {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 var(--bosluk);           /* Satır arası 0 (alanların kendi boşluğu var), sütun arası 1rem */
+}
+
+
+/* ---------------------------------------------------------
    7. Alt bilgi
    --------------------------------------------------------- */
 .alt-bilgi {
@@ -287,4 +366,78 @@ img {
 
 .alt-bilgi p {
   margin: 0.25rem 0;
+}
+
+
+/* ---------------------------------------------------------
+   8. Medya sorguları
+   "Önce mobil": Yukarıdaki kurallar telefon içindir.
+   min-width ile "ekran en az şu kadar genişse" diyerek büyütüyoruz.
+   Kırılma noktaları: 600px (tablet) ve 900px (masaüstü).
+   --------------------------------------------------------- */
+
+/* Tablet: 600px ve üstü */
+@media (min-width: 600px) {
+  h1 { font-size: 2.5rem; }
+
+  /* Karşılama: Grid ile iki sütun. Solda resim, sağda başlık, metin ve düğme. */
+  .karsilama {
+    display: grid;
+    grid-template-columns: 200px 1fr;   /* 1. sütun sabit 200px, 2. sütun kalan alan */
+    column-gap: 2rem;
+    align-items: center;
+    text-align: left;
+  }
+
+  .karsilama img {
+    grid-row: 1 / span 3;         /* Resim 1. satırdan başlayıp 3 satır boyunca uzanır */
+  }
+
+  .karsilama h1,
+  .karsilama p {
+    margin-inline: 0;             /* Mobildeki ortalamayı kaldır */
+  }
+
+  .karsilama .dugme {
+    justify-self: start;          /* Bağlantı hücreyi doldurmasın, solda dursun */
+  }
+
+  .ruh-hali-listesi { grid-template-columns: repeat(3, 1fr); }
+  .paket-listesi    { grid-template-columns: repeat(2, 1fr); }
+  .muhur-listesi    { grid-template-columns: repeat(3, 1fr); }
+  .filtre-formu     { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Masaüstü: 900px ve üstü */
+@media (min-width: 900px) {
+  /* Menü artık her zaman açık ve yatay; hamburgere gerek yok. */
+  .menu-dugmesi {
+    display: none;
+  }
+
+  .ana-menu {
+    order: 1;                     /* Logodan hemen sonra (logo margin-right: auto ile solda kalır) */
+    flex-basis: auto;             /* Mobildeki %100 genişliği kaldır */
+    max-height: none;             /* Mobildeki kapalı hâli iptal et */
+    overflow: visible;
+    visibility: visible;
+  }
+
+  .tema-dugmesi {
+    order: 2;                     /* Menünün sağında */
+  }
+
+  .ana-menu ul {
+    flex-direction: row;          /* Bağlantılar yan yana */
+    padding: 0;
+  }
+
+  /* Aktif sayfa çizgisi masaüstünde solda değil, altta. */
+  .ana-menu a[aria-current="page"] {
+    box-shadow: inset 0 -3px 0 var(--renk-vurgu);
+  }
+
+  .ruh-hali-listesi { grid-template-columns: repeat(4, 1fr); }
+  .paket-listesi    { grid-template-columns: repeat(3, 1fr); }
+  .muhur-listesi    { grid-template-columns: repeat(4, 1fr); }
 }
