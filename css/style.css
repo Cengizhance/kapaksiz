@@ -140,6 +140,140 @@ img {
 
 
 /* ---------------------------------------------------------
+   3. Üst bilgi ve menü (Flexbox)
+   Mobilde: [Logo ........ 🌙 ☰]  ve altında açılıp kapanan menü.
+   Masaüstü düzeni Ders 5'te medya sorgusuyla eklenecek.
+   --------------------------------------------------------- */
+.ust-bilgi {
+  display: flex;                  /* Çocuklarını yan yana dizer */
+  flex-wrap: wrap;                /* Sığmayan öğe alt satıra geçebilir (menü için) */
+  align-items: center;            /* Dikeyde ortalar */
+  gap: 0.5rem;                    /* Öğeler arası boşluk */
+  padding: 0.75rem var(--bosluk);
+  background-color: var(--renk-yuzey);
+  border-bottom: 1px solid var(--renk-cizgi);
+  box-shadow: var(--golge);
+  position: sticky;               /* Sayfa kaydırılınca üstte yapışık kalır */
+  top: 0;
+  z-index: 10;                    /* Diğer içeriklerin üstünde dursun */
+}
+
+.logo {
+  margin-right: auto;             /* Sağındaki boşluğun tamamını alır, diğerlerini sağa iter */
+  font-family: var(--yazi-baslik);
+  font-size: 1.6rem;
+  text-decoration: none;
+  color: var(--renk-metin);
+}
+
+.logo:hover {
+  color: var(--renk-vurgu);
+}
+
+/* Sıralama: HTML'deki sıra logo, tema, hamburger, menü.
+   order ile görsel sırayı belirleriz; menü en sona ve tam genişliğe. */
+.tema-dugmesi { order: 1; }
+.menu-dugmesi { order: 2; }
+.ana-menu     { order: 3; flex-basis: 100%; }
+
+/* İki düğmenin ortak görünüşü */
+.tema-dugmesi,
+.menu-dugmesi {
+  width: 2.75rem;                 /* 44px: Parmakla rahat dokunulacak boyut */
+  height: 2.75rem;
+  background: none;
+  border: 1px solid var(--renk-cizgi);
+  border-radius: var(--kose);
+  color: var(--renk-metin);
+  font-size: 1.2rem;
+  cursor: pointer;                /* Üzerine gelince el işareti */
+  transition: background-color var(--gecis), border-color var(--gecis);
+}
+
+.tema-dugmesi:hover,
+.menu-dugmesi:hover {
+  background-color: var(--renk-zemin);
+  border-color: var(--renk-vurgu);
+}
+
+/* Hamburger: Düğmenin içindeki üç çizgiyi alt alta dizmek için yine Flexbox */
+.menu-dugmesi {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;        /* Ana eksende (burada dikey) ortala */
+  align-items: center;            /* Çapraz eksende (burada yatay) ortala */
+  gap: 5px;
+}
+
+.menu-cizgi {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: currentColor; /* Düğmenin yazı rengini kullan, karanlık modda da uyumlu */
+  border-radius: 2px;
+  transition: transform var(--gecis), opacity var(--gecis);
+}
+
+/* Menü açıkken (JS aria-expanded="true" yapınca) üç çizgi X'e dönüşür.
+   1. çizgi aşağı kayıp 45° döner, 2. kaybolur, 3. yukarı kayıp -45° döner. */
+.menu-dugmesi[aria-expanded="true"] .menu-cizgi:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.menu-dugmesi[aria-expanded="true"] .menu-cizgi:nth-child(2) {
+  opacity: 0;
+}
+.menu-dugmesi[aria-expanded="true"] .menu-cizgi:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobil menü varsayılan olarak kapalı.
+   display: none ile geçiş animasyonu yapılamaz, bu yüzden max-height'ı 0'dan büyütüyoruz. */
+.ana-menu {
+  max-height: 0;
+  overflow: hidden;               /* Yükseklik 0 iken içerik taşıp görünmesin */
+  visibility: hidden;             /* Kapalıyken Tab tuşu gizli bağlantılara gitmesin */
+  transition: max-height var(--gecis), visibility var(--gecis);
+}
+
+/* JS, hamburgere tıklanınca menüye "acik" sınıfını ekleyecek (Ders 7). */
+.ana-menu.acik {
+  max-height: 20rem;
+  visibility: visible;
+}
+
+.ana-menu ul {
+  list-style: none;               /* Madde işaretlerini kaldır */
+  margin: 0;
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;         /* Mobilde bağlantılar alt alta */
+  gap: 0.25rem;
+}
+
+.ana-menu a {
+  display: block;                 /* Bütün satır tıklanabilir olsun */
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--kose);
+  text-decoration: none;
+  color: var(--renk-metin);
+  transition: background-color var(--gecis), color var(--gecis);
+}
+
+.ana-menu a:hover,
+.ana-menu a:focus-visible {
+  background-color: var(--renk-zemin);
+  color: var(--renk-vurgu);
+}
+
+/* Bulunduğun sayfanın bağlantısı: HTML'deki aria-current="page" niteliğini seçiyoruz. */
+.ana-menu a[aria-current="page"] {
+  color: var(--renk-vurgu);
+  font-weight: bold;
+  box-shadow: inset 3px 0 0 var(--renk-vurgu);   /* Solda ince kırmızı çizgi */
+}
+
+
+/* ---------------------------------------------------------
    7. Alt bilgi
    --------------------------------------------------------- */
 .alt-bilgi {
