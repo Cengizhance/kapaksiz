@@ -34,6 +34,7 @@
   --renk-hata: #b3261e;
   --renk-basari: #2e7d4f;
   --renk-cizgi: #ddd3c2;
+  --renk-dugme-metin: #ffffff;  /* Vurgu renkli düğmenin üstündeki yazı */
 
   /* Yazı tipleri (Google Fonts). Font yüklenemezse virgülden sonrakiler devreye girer. */
   --yazi-govde: "Lora", Georgia, serif;
@@ -62,6 +63,7 @@
   --renk-hata: #f28b82;
   --renk-basari: #7fd1a0;
   --renk-cizgi: #3d362f;
+  --renk-dugme-metin: #1d1a17;  /* Açık renkli vurgunun üstünde koyu yazı daha okunaklı */
   --golge: 0 2px 8px rgba(0, 0, 0, 0.4);
   --golge-buyuk: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
@@ -301,6 +303,66 @@ section {
   text-align: center;
 }
 
+/* --- Düğmeler ---
+   .dugme hem <a> hem <button> öğelerine verilebilir; ikisi de aynı görünür. */
+.dugme {
+  display: inline-block;
+  padding: 0.7rem 1.4rem;
+  border: 2px solid var(--renk-vurgu);
+  border-radius: var(--kose);
+  background-color: var(--renk-vurgu);
+  color: var(--renk-dugme-metin);
+  font: inherit;                  /* <button> sayfanın yazı tipini kendiliğinden almaz */
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--gecis), border-color var(--gecis),
+              transform var(--gecis), box-shadow var(--gecis);
+}
+
+.dugme:hover {
+  background-color: var(--renk-vurgu-koyu);
+  border-color: var(--renk-vurgu-koyu);
+  color: var(--renk-dugme-metin);  /* a:hover'ın rengini ez */
+  transform: translateY(-2px);    /* Hafifçe yukarı kalkar */
+  box-shadow: var(--golge);
+}
+
+.dugme:active {
+  transform: translateY(0);       /* Basılınca yerine iner, "tıklandı" hissi */
+  box-shadow: none;
+}
+
+/* İkincil düğme: Daha az önemli işler için (ör. pasaportu sıfırla). İçi boş, kenarı renkli. */
+.dugme-ikincil {
+  background-color: transparent;
+  color: var(--renk-vurgu);
+}
+
+.dugme-ikincil:hover {
+  background-color: var(--renk-vurgu);
+  color: var(--renk-dugme-metin);
+}
+
+/* --- Durum mesajları (yükleniyor, hata, boş liste) --- */
+.durum,
+.bos-durum {
+  text-align: center;
+  color: var(--renk-soluk);
+  font-style: italic;
+}
+
+.durum.hata {
+  color: var(--renk-hata);
+  font-style: normal;
+  font-weight: bold;
+}
+
+/* :empty: İçi tamamen boşken yer kaplamasın. */
+.durum:empty {
+  display: none;
+}
+
 
 /* ---------------------------------------------------------
    5. Kart ızgaraları (CSS Grid)
@@ -327,7 +389,225 @@ section {
 .muhur-listesi {
   grid-template-columns: repeat(2, 1fr);
   list-style: none;               /* <ul> olduğu için madde işaretlerini kaldır */
+  padding: 0.5rem;
+  overflow: hidden;               /* Mühür 2 kat büyük başlarken sayfada yatay kaydırma çıkmasın */
+}
+
+/* --- Ruh hali kartı ---
+   JS her ruh hali için şunu üretecek (Ders 9):
+   <a class="ruh-hali-karti" href="randevu.html?ruh=...">
+     <span class="ruh-hali-baslik">...</span>
+     <span class="ruh-hali-ipucu">...</span>
+   </a> */
+.ruh-hali-karti {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: var(--bosluk);
+  border: 1px solid var(--renk-cizgi);
+  border-top: 4px solid var(--renk-paket);  /* Üstte ambalaj renginde şerit */
+  border-radius: var(--kose);
+  background-color: var(--renk-yuzey);
+  color: var(--renk-metin);
+  text-decoration: none;
+  box-shadow: var(--golge);
+  transition: transform var(--gecis), box-shadow var(--gecis), border-color var(--gecis);
+}
+
+.ruh-hali-karti:hover,
+.ruh-hali-karti:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: var(--golge-buyuk);
+  border-top-color: var(--renk-vurgu);
+  color: var(--renk-metin);
+}
+
+.ruh-hali-baslik {
+  font-family: var(--yazi-baslik);
+  font-size: 1.1rem;
+}
+
+.ruh-hali-ipucu {
+  color: var(--renk-soluk);
+  font-size: 0.9rem;
+}
+
+
+/* --- Kitap kartı (paket) ve çevirme animasyonu ---
+   JS her kitap için şunu üretecek (Ders 10):
+   <article class="kitap-karti">
+     <div class="kart-ic">
+       <div class="kart-yuz kart-on">   blockquote.ilk-cumle + ul.etiketler       </div>
+       <div class="kart-yuz kart-arka"> img.kart-kapak + h3.kart-baslik
+                                        + p.kart-yazar + button.dugme            </div>
+     </div>
+   </article>
+   Karta tıklanınca JS, article'a "acik" sınıfını ekleyecek ve kart dönecek. */
+.kitap-karti {
+  perspective: 1000px;            /* 3B derinlik: Dönüş düz bir sıkışma değil, gerçek dönüş gibi görünür */
+}
+
+.kart-ic {
+  display: grid;                  /* İki yüzü aynı hücreye üst üste koymak için */
+  min-height: 20rem;
+  transform-style: preserve-3d;   /* Çocuklar 3B uzayda kalsın */
+  transition: transform 0.7s ease;
+}
+
+.kitap-karti.acik .kart-ic {
+  transform: rotateY(180deg);     /* Y ekseni etrafında yarım tur */
+}
+
+.kart-yuz {
+  grid-area: 1 / 1;               /* İki yüz de 1. satır 1. sütunda: Üst üste biner */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--bosluk);
+  padding: 1.25rem;
+  border-radius: var(--kose);
+  box-shadow: var(--golge);
+  backface-visibility: hidden;    /* Yüzün arkası görünmesin; dönünce arkadaki yüz görünür */
+}
+
+/* Ön yüz: Ambalaj kâğıdı ve üzerinde çapraz sicim.
+   İki linear-gradient ile ortadan geçen birer şerit çiziyoruz: biri dikey, biri yatay. */
+.kart-on {
+  background-color: var(--renk-paket);
+  background-image:
+    linear-gradient(to right,
+      transparent calc(50% - 5px), var(--renk-sicim) calc(50% - 5px),
+      var(--renk-sicim) calc(50% + 5px), transparent calc(50% + 5px)),
+    linear-gradient(to bottom,
+      transparent calc(50% - 5px), var(--renk-sicim) calc(50% - 5px),
+      var(--renk-sicim) calc(50% + 5px), transparent calc(50% + 5px));
+  cursor: pointer;
+  transition: transform var(--gecis), box-shadow var(--gecis);
+}
+
+.kart-on:hover,
+.kart-on:focus-visible {
+  transform: translateY(-4px) rotate(-1deg);   /* Paket hafifçe kalkıp eğilir */
+  box-shadow: var(--golge-buyuk);
+}
+
+/* İlk cümle, paketin üstüne yapıştırılmış kâğıt bir etiket gibi */
+.ilk-cumle {
+  position: relative;             /* Sicimin üstünde dursun */
+  margin: 0;
+  padding: 1rem;
+  background-color: var(--renk-yuzey);
+  border-radius: 4px;
+  box-shadow: var(--golge);
+  font-style: italic;
+}
+
+.ilk-cumle p {
+  margin: 0;
+}
+
+.etiketler {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0;
   padding: 0;
+  list-style: none;
+}
+
+.etiketler li {
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;           /* Çok büyük köşe = hap şekli */
+  background-color: var(--renk-yuzey);
+  color: var(--renk-metin);
+  font-size: 0.8rem;
+}
+
+/* Arka yüz: Başlangıçta zaten 180° dönük durur.
+   Kart dönünce 180 + 180 = 360°, yani düz hâle gelir. */
+.kart-arka {
+  transform: rotateY(180deg);
+  align-items: center;
+  text-align: center;
+  background-color: var(--renk-yuzey);
+}
+
+.kart-kapak {
+  width: 120px;
+  aspect-ratio: 2 / 3;            /* Kitap kapağı oranı */
+  object-fit: cover;              /* Resim oranı farklıysa kırp, yamultma */
+  border-radius: 4px;
+  box-shadow: var(--golge);
+}
+
+.kart-baslik {
+  margin: 0;
+  font-family: var(--yazi-baslik);
+  font-weight: normal;
+  font-size: 1.2rem;
+}
+
+.kart-yazar {
+  margin: 0;
+  color: var(--renk-soluk);
+}
+
+
+/* --- Mühür (pasaport) ---
+   JS her okunan kitap için şunu üretecek (Ders 12):
+   <li class="muhur">
+     <span class="muhur-yil">2026</span>
+     <span class="muhur-baslik">...</span>
+     <span class="muhur-yazar">...</span>
+   </li> */
+.muhur {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1;                /* Kare kutu; border-radius ile daireye dönüşür */
+  padding: 1rem;
+  border: 3px double var(--renk-vurgu);
+  border-radius: 50%;
+  color: var(--renk-vurgu);
+  text-align: center;
+  transform: rotate(-8deg);       /* Elle basılmış gibi hafif eğik */
+  animation: muhur-bas 0.5s ease-out both;
+}
+
+/* @keyframes: Animasyonun adımlarını tanımlar.
+   Mühür büyük ve görünmez başlar, hızla küçülüp kâğıda "basılır". */
+@keyframes muhur-bas {
+  0% {
+    opacity: 0;
+    transform: scale(2) rotate(-30deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(0.9) rotate(-6deg);   /* Biraz fazla ezilir */
+  }
+  100% {
+    transform: scale(1) rotate(-8deg);     /* Son hâline oturur */
+  }
+}
+
+.muhur-yil {
+  font-family: var(--yazi-baslik);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+}
+
+.muhur-baslik {
+  font-family: var(--yazi-baslik);
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.muhur-yazar {
+  font-size: 0.75rem;
+  opacity: 0.8;
 }
 
 
@@ -342,6 +622,74 @@ section {
   flex-direction: column;
   gap: 0.35rem;
   margin-bottom: var(--bosluk);
+}
+
+label {
+  font-weight: bold;
+}
+
+/* Metin kutuları, açılır liste ve çok satırlı alan aynı görünsün. */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--renk-cizgi);
+  border-radius: var(--kose);
+  background-color: var(--renk-yuzey);
+  color: var(--renk-metin);
+  font: inherit;                  /* Form alanları sayfanın yazı tipini kendiliğinden almaz */
+  transition: border-color var(--gecis), box-shadow var(--gecis);
+}
+
+textarea {
+  resize: vertical;               /* Kullanıcı sadece yüksekliği değiştirebilsin, genişliği bozmasın */
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: var(--renk-soluk);
+}
+
+/* :focus: İmleç alandayken (fare ya da klavye fark etmez) kenar rengi değişir
+   ve çevresinde yumuşak bir hale belirir. */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--renk-vurgu);
+  box-shadow: 0 0 0 3px rgba(181, 82, 59, 0.25);
+  outline: none;                  /* Hale zaten odağı gösteriyor, çift çerçeve olmasın */
+}
+
+/* JS, hatalı alana "hatali" sınıfını ekleyecek (Ders 13). */
+input.hatali,
+select.hatali,
+textarea.hatali {
+  border-color: var(--renk-hata);
+  box-shadow: 0 0 0 3px rgba(179, 38, 30, 0.2);
+}
+
+.hata-mesaji {
+  min-height: 1.3em;              /* Mesaj gelince form aşağı zıplamasın, yer önceden ayrılsın */
+  color: var(--renk-hata);
+  font-size: 0.9rem;
+}
+
+.basari-mesaji {
+  padding: var(--bosluk);
+  border-left: 4px solid var(--renk-basari);
+  border-radius: var(--kose);
+  background-color: var(--renk-yuzey);
+  color: var(--renk-basari);
+  font-weight: bold;
+}
+
+/* Pasaport sayfasındaki hedef çubuğu */
+progress {
+  width: 100%;
+  height: 1rem;
+  accent-color: var(--renk-vurgu);  /* Tarayıcının hazır öğesine kendi rengimizi verir */
 }
 
 /* Randevu sayfasındaki filtre formu: Telefonda alt alta, tablette yan yana (Bölüm 8). */
@@ -440,4 +788,15 @@ section {
   .ruh-hali-listesi { grid-template-columns: repeat(4, 1fr); }
   .paket-listesi    { grid-template-columns: repeat(3, 1fr); }
   .muhur-listesi    { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Hareket azaltma: İşletim sisteminde "animasyonları azalt" ayarını açan kullanıcılar
+   (ör. baş dönmesi yaşayanlar) için animasyonları neredeyse anlık yap. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
